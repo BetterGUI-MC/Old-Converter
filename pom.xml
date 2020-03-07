@@ -8,6 +8,11 @@
   <artifactId>Converter</artifactId>
   <version>1.0-SNAPSHOT</version>
 
+  <properties>
+    <java.version>1.8</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
   <build>
     <plugins>
       <plugin>
@@ -38,12 +43,21 @@
         </executions>
         <configuration>
           <createDependencyReducedPom>false</createDependencyReducedPom>
+          <minimizeJar>true</minimizeJar>
           <relocations>
             <relocation>
               <pattern>de.leonhard.storage</pattern>
               <shadedPattern>me.hsgamer.bettergui.converter.storage</shadedPattern>
             </relocation>
           </relocations>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
         </configuration>
       </plugin>
     </plugins>

@@ -4,9 +4,9 @@ import de.leonhard.storage.internal.FlatFile;
 import me.hsgamer.bettergui.converter.impl.ChestCommands;
 
 public enum Type {
-  CC(new ChestCommands())
-  ;
+  CC(new ChestCommands());
   private Converter converter;
+
   Type(Converter converter) {
     this.converter = converter;
   }
