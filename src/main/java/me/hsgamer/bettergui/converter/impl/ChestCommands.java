@@ -106,9 +106,28 @@ public class ChestCommands implements Converter {
               toSlots(section.getString(subkey)).forEach(slot -> strings.add(String.valueOf(slot)));
               to.set(subkey, String.join(", ", strings));
               break;
+            case IconNodes.PRICE:
+              to.set(IconNodes.CLICK_REQUIREMENT + ".money", section.get(subkey));
+              break;
+            case IconNodes.POINTS:
+              to.set(IconNodes.CLICK_REQUIREMENT + ".point", section.get(subkey));
+              break;
+            case IconNodes.TOKENS:
+              to.set(IconNodes.CLICK_REQUIREMENT + ".token", section.get(subkey));
+              break;
+            case IconNodes.EXP_LEVELS:
+              to.set(IconNodes.CLICK_REQUIREMENT + ".level", section.get(subkey));
+              break;
+            case IconNodes.PERMISSION:
+              to.set(IconNodes.CLICK_REQUIREMENT + ".permission", section.get(subkey));
+              break;
+            case IconNodes.VIEW_PERMISSION:
+              to.set(IconNodes.VIEW_REQUIREMENT + ".permission", section.get(subkey));
+              break;
             case IconNodes.COOLDOWN:
-            case IconNodes.CLICK_REQUIREMENT:
-            case IconNodes.VIEW_REQUIREMENT:
+            case IconNodes.REQUIRED_ITEM:
+            case IconNodes.PERMISSION_MESSAGE:
+            case IconNodes.CLICK_REQUIREMENT_MESSAGE:
             case IconNodes.COOLDOWN_MESSAGE:
               break;
             default:
@@ -146,5 +165,15 @@ public class ChestCommands implements Converter {
     static final String VIEW_REQUIREMENT = "VIEW-REQUIREMENT";
     static final String CLICK_REQUIREMENT = "CLICK-REQUIREMENT";
     static final String COOLDOWN_MESSAGE = "COOLDOWN-MESSAGE";
+
+    static final String PRICE = "PRICE";
+    static final String POINTS = "POINTS";
+    static final String TOKENS = "TOKENS";
+    static final String EXP_LEVELS = "LEVELS";
+    static final String REQUIRED_ITEM = "REQUIRED-ITEM";
+    static final String PERMISSION = "PERMISSION";
+    static final String PERMISSION_MESSAGE = "PERMISSION-MESSAGE";
+    static final String VIEW_PERMISSION = "VIEW-PERMISSION";
+    static final String CLICK_REQUIREMENT_MESSAGE = "CLICK-REQUIREMENT-MESSAGE";
   }
 }
