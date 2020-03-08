@@ -11,3 +11,5 @@ t
 Dsrc/main/java/me/hsgamer/bettergui/converter/impl/ChestCommands.java,f/1/f1f22d2f37499cedc4b92236ee8898ad52c60580
 f
 6src/main/java/me/hsgamer/bettergui/converter/Main.java,8/1/81f7cbb7f1ae2c9fed9410dd245cda7420fba962
+g
+7src/main/java/me/hsgamer/bettergui/converter/Utils.java,6/f/6f8cc403292abbf58c6e355ac80ad1f59ddb0ccb

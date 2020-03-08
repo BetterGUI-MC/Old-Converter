@@ -106,6 +106,11 @@ public class ChestCommands implements Converter {
               toSlots(section.getString(subkey)).forEach(slot -> strings.add(String.valueOf(slot)));
               to.set(subkey, String.join(", ", strings));
               break;
+            case IconNodes.COOLDOWN:
+            case IconNodes.CLICK_REQUIREMENT:
+            case IconNodes.VIEW_REQUIREMENT:
+            case IconNodes.COOLDOWN_MESSAGE:
+              break;
             default:
               to.set(subkey, section.get(subkey));
               break;
@@ -138,6 +143,8 @@ public class ChestCommands implements Converter {
     static final String POSITION_Y = "POSITION-Y";
     static final String SLOT = "SLOT";
     static final String COOLDOWN = "COOLDOWN";
+    static final String VIEW_REQUIREMENT = "VIEW-REQUIREMENT";
+    static final String CLICK_REQUIREMENT = "CLICK-REQUIREMENT";
     static final String COOLDOWN_MESSAGE = "COOLDOWN-MESSAGE";
   }
 }
