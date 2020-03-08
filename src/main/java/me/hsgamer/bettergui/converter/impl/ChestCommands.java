@@ -5,6 +5,7 @@ import de.leonhard.storage.sections.FlatFileSection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.hsgamer.bettergui.converter.Converter;
 import me.hsgamer.bettergui.converter.Utils;
@@ -37,8 +38,8 @@ public class ChestCommands implements Converter {
   }
 
   public void convert(Logger logger, FlatFile from, FlatFile to) {
-    logger.info("This is not a perfect converter");
-    logger.info("You may need to double-check your file after the conversion is completed");
+    logger.info(
+        "\nThis is not a perfect converter\nYou may need to double-check your file after the conversion is completed\n");
 
     for (String key : from.singleLayerKeySet()) {
       FlatFileSection section = from.getSection(key);
@@ -133,6 +134,8 @@ public class ChestCommands implements Converter {
             case IconNodes.PERMISSION_MESSAGE:
             case IconNodes.CLICK_REQUIREMENT_MESSAGE:
             case IconNodes.COOLDOWN_MESSAGE:
+              logger.log(Level.WARNING, "Ignored {0}.{1}",
+                  new Object[]{section.getPathPrefix(), subkey});
               break;
             default:
               to.set(subkey, section.get(subkey));
