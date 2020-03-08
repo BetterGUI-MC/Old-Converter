@@ -5,11 +5,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Utils {
+  private Utils() {
+
+  }
+  
   @SuppressWarnings("unchecked")
   public static List<String> createStringListFromObject(Object input, boolean trim, String split) {
-    System.out.println("Called");
-    System.out.println(input.getClass().getName());
-    System.out.println(input.toString());
     List<String> list = new ArrayList<>();
     if (input instanceof List) {
       list.addAll((List<String>) input);
