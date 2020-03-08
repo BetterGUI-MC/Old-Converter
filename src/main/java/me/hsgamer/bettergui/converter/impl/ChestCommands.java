@@ -10,6 +10,31 @@ import me.hsgamer.bettergui.converter.Utils;
 
 public class ChestCommands implements Converter {
 
+  private static List<Integer> toSlots(String input) {
+    List<Integer> slots = new ArrayList<>();
+    for (String string : input.split(",")) {
+      string = string.trim();
+      if (Utils.isValueNumber(string)) {
+        slots.add(Integer.parseInt(string));
+      } else {
+        String[] split = string.split("-", 2);
+        split[0] = split[0].trim();
+        split[1] = split[1].trim();
+        if (Utils.isValueNumber(split[0]) && Utils.isValueNumber(split[1])) {
+          int s1 = Integer.parseInt(split[0]);
+          int s2 = Integer.parseInt(split[1]);
+          int start = Math.min(s1, s2);
+          int end = Math.max(s1, s2);
+          for (int i = start; i <= end; i++) {
+            slots.add(i);
+          }
+        }
+      }
+    }
+    slots.replaceAll(slot -> slot - 1);
+    return slots;
+  }
+
   public void convert(FlatFile from, FlatFile to) {
     for (String key : from.singleLayerKeySet()) {
       FlatFileSection section = from.getSection(key);
@@ -21,7 +46,8 @@ public class ChestCommands implements Converter {
             case MenuSettings.MENU_COMMAND:
             case MenuSettings.OPEN_ACTION:
             case MenuSettings.CLOSE_ACTION:
-              List<String> commands = Utils.createStringListFromObject(section.get(subkey, Object.class), true, ";");
+              List<String> commands = Utils
+                  .createStringListFromObject(section.get(subkey, Object.class), true, ";");
               to.set(subkey, commands);
               break;
             case MenuSettings.OPEN_ITEM:
@@ -57,7 +83,8 @@ public class ChestCommands implements Converter {
               if (value instanceof Map) {
                 Map<String, Object> map = (Map<String, Object>) value;
                 for (Map.Entry<String, Object> entry : map.entrySet()) {
-                  List<String> commands = Utils.createStringListFromObject(entry.getValue(), true, ";");
+                  List<String> commands = Utils
+                      .createStringListFromObject(entry.getValue(), true, ";");
                   to.set(String.join(".", subkey, entry.getKey()), commands);
                 }
               } else {
@@ -66,7 +93,8 @@ public class ChestCommands implements Converter {
               }
               break;
             case IconNodes.ENCHANT:
-              List<String> enchants = Utils.createStringListFromObject(section.get(IconNodes.ENCHANT), true, ";");
+              List<String> enchants = Utils
+                  .createStringListFromObject(section.get(IconNodes.ENCHANT), true, ";");
               to.set(subkey, enchants);
               break;
             case IconNodes.POSITION_X:
@@ -87,32 +115,8 @@ public class ChestCommands implements Converter {
     }
   }
 
-  private static List<Integer> toSlots(String input) {
-    List<Integer> slots = new ArrayList<>();
-    for (String string : input.split(",")) {
-      string = string.trim();
-      if (Utils.isValueNumber(string)) {
-        slots.add(Integer.parseInt(string));
-      } else {
-        String[] split = string.split("-", 2);
-        split[0] = split[0].trim();
-        split[1] = split[1].trim();
-        if (Utils.isValueNumber(split[0]) && Utils.isValueNumber(split[1])) {
-          int s1 = Integer.parseInt(split[0]);
-          int s2 = Integer.parseInt(split[1]);
-          int start = Math.min(s1, s2);
-          int end = Math.max(s1, s2);
-          for (int i = start; i <= end; i++) {
-            slots.add(i);
-          }
-        }
-      }
-    }
-    slots.replaceAll(slot -> slot - 1);
-    return slots;
-  }
-
   private static class MenuSettings {
+
     static final String MENU_COMMAND = "command";
     static final String OPEN_ACTION = "open-action";
     static final String CLOSE_ACTION = "close-action";

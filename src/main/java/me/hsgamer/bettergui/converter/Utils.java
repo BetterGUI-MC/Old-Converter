@@ -5,10 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Utils {
+
   private Utils() {
 
   }
-  
+
   @SuppressWarnings("unchecked")
   public static List<String> createStringListFromObject(Object input, boolean trim, String split) {
     List<String> list = new ArrayList<>();
