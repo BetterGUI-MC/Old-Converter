@@ -5,6 +5,7 @@ import de.leonhard.storage.sections.FlatFileSection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import me.hsgamer.bettergui.converter.Converter;
 import me.hsgamer.bettergui.converter.Utils;
 
@@ -35,7 +36,10 @@ public class ChestCommands implements Converter {
     return slots;
   }
 
-  public void convert(FlatFile from, FlatFile to) {
+  public void convert(Logger logger, FlatFile from, FlatFile to) {
+    logger.info("This is not a perfect converter");
+    logger.info("You may need to double-check your file after the conversion is completed");
+
     for (String key : from.singleLayerKeySet()) {
       FlatFileSection section = from.getSection(key);
       to.setPathPrefix(key);
@@ -137,6 +141,8 @@ public class ChestCommands implements Converter {
         }
       }
     }
+
+    logger.info("Completed");
   }
 
   private static class MenuSettings {

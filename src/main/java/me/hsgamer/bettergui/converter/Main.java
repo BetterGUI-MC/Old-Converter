@@ -29,7 +29,7 @@ public class Main {
           Config toConfig = LightningBuilder.fromFile(output).createConfig();
 
           // Start the convert
-          type.convert(fromConfig, toConfig);
+          type.convert(logger, fromConfig, toConfig);
         } else {
           logger.log(Level.WARNING, "{0} is not found", filename);
         }
