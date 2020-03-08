@@ -38,7 +38,7 @@ public class Main {
         logger.warning("Available: " + Arrays.toString(Type.values()));
       }
     } else {
-      logger.info("Usage: java -jar Converter.jar <type> <filename>.yml");
+      logger.info("Usage: java -jar Converter-<version>.jar <type> <filename>.yml");
     }
   }
 }
