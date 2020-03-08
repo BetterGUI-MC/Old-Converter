@@ -2,7 +2,7 @@
 Converter from other plugins to BetterGUI
 
 ## Usage
-> `java -jar Converter-<version>.jar <type> <filename>.yml`
+> `java -jar Converter-<version>.jar <type> <filename>.yml` <br>
 Available types:
 * `CC`: Chest Commands GUI
 
