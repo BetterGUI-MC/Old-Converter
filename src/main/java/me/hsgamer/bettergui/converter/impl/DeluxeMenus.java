@@ -91,7 +91,7 @@ public class DeluxeMenus implements Converter {
           commands.put("middle", convertActions(section.getStringList(s)));
           break;
         default:
-          logger.info(() -> "Ignored icon setting" + name + "." + s);
+          logger.info(() -> "Ignored icon setting " + name + "." + s);
           break;
       }
 
