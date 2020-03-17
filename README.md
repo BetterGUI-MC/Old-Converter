@@ -5,6 +5,7 @@ Converter from other plugins to BetterGUI
 > `java -jar Converter-<version>.jar <type> <filename>.yml`
 * Available types:
   * `CC`: Chest Commands GUI
+  * `DM`: Deluxe Menus
 
 ## Note
 This is not a perfect converter, it can only convert some basic parts of the old config.
