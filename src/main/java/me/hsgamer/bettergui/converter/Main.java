@@ -71,7 +71,7 @@ public class Main {
       }
     } else {
       logger.info(
-          "Usage: java -Dtype=<type> -jar Converter-<version>.jar <filename> [<filename1> <filename2> ...]");
+          "Usage: java -Dtype=<type> -jar Converter.jar <filename> [<filename1> <filename2> ...]");
     }
   }
 
