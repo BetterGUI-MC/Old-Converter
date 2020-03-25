@@ -106,9 +106,6 @@ public class DeluxeMenus implements Converter {
 
   @Override
   public void convert(Logger logger, FlatFile from, FlatFile to) {
-    logger.info(
-        "\nThis is not a perfect converter\nYou may need to double-check your file after the conversion is completed\n");
-
     for (String setting : from.singleLayerKeySet()) {
       switch (setting) {
         case MenuSettings.TITLE:
@@ -142,7 +139,6 @@ public class DeluxeMenus implements Converter {
           break;
       }
     }
-    logger.info("Completed");
   }
 
   private static final class MenuSettings {

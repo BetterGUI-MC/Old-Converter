@@ -3,6 +3,7 @@ package me.hsgamer.bettergui.converter.impl;
 import de.leonhard.storage.internal.FlatFile;
 import de.leonhard.storage.sections.FlatFileSection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -38,9 +39,6 @@ public class ChestCommands implements Converter {
   }
 
   public void convert(Logger logger, FlatFile from, FlatFile to) {
-    logger.info(
-        "\nThis is not a perfect converter\nYou may need to double-check your file after the conversion is completed\n");
-
     for (String key : from.singleLayerKeySet()) {
       FlatFileSection section = from.getSection(key);
       to.setPathPrefix(key);
@@ -101,6 +99,7 @@ public class ChestCommands implements Converter {
               List<String> enchants = Utils
                   .createStringListFromObject(section.get(IconNodes.ENCHANT), true, ";");
               to.set(subkey, enchants);
+              to.set("flag", Collections.singletonList("HIDE_ENCHANTS"));
               break;
             case IconNodes.POSITION_X:
             case IconNodes.POSITION_Y:
@@ -144,8 +143,6 @@ public class ChestCommands implements Converter {
         }
       }
     }
-
-    logger.info("Completed");
   }
 
   private static class MenuSettings {
