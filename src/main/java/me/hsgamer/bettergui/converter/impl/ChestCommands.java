@@ -4,9 +4,9 @@ import de.leonhard.storage.internal.FlatFile;
 import de.leonhard.storage.sections.FlatFileSection;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.hsgamer.bettergui.converter.Converter;
 import me.hsgamer.bettergui.converter.Utils;
@@ -111,30 +111,39 @@ public class ChestCommands implements Converter {
               to.set(subkey, String.join(", ", strings));
               break;
             case IconNodes.PRICE:
-              to.set(IconNodes.CLICK_REQUIREMENT + ".money", section.get(subkey));
+              to.set(IconNodes.CLICK_REQUIREMENT + ".default.converted.money", section.get(subkey));
               break;
             case IconNodes.POINTS:
-              to.set(IconNodes.CLICK_REQUIREMENT + ".point", section.get(subkey));
+              to.set(IconNodes.CLICK_REQUIREMENT + ".default.converted.point", section.get(subkey));
               break;
             case IconNodes.TOKENS:
-              to.set(IconNodes.CLICK_REQUIREMENT + ".token", section.get(subkey));
+              to.set(IconNodes.CLICK_REQUIREMENT + ".default.converted.token", section.get(subkey));
               break;
             case IconNodes.EXP_LEVELS:
-              to.set(IconNodes.CLICK_REQUIREMENT + ".level", section.get(subkey));
+              to.set(IconNodes.CLICK_REQUIREMENT + ".default.converted.level", section.get(subkey));
               break;
             case IconNodes.PERMISSION:
-              to.set(IconNodes.CLICK_REQUIREMENT + ".permission", section.get(subkey));
+              to.set(IconNodes.CLICK_REQUIREMENT + ".default.converted.permission",
+                  Utils.createStringListFromObject(section.get(subkey), true, ";"));
               break;
             case IconNodes.VIEW_PERMISSION:
-              to.set(IconNodes.VIEW_REQUIREMENT + ".permission", section.get(subkey));
+              to.set(IconNodes.VIEW_REQUIREMENT + ".converted.permission",
+                  Utils.createStringListFromObject(section.get(subkey), true, ";"));
+              break;
+            case IconNodes.CLICK_REQUIREMENT:
+              to.set(IconNodes.CLICK_REQUIREMENT + ".default.converted", convertRequirement(logger,
+                  from.getSection(section.getPathPrefix() + "." + subkey)));
+              break;
+            case IconNodes.VIEW_REQUIREMENT:
+              to.set(IconNodes.VIEW_REQUIREMENT + ".default.converted", convertRequirement(logger,
+                  from.getSection(section.getPathPrefix() + "." + subkey)));
               break;
             case IconNodes.COOLDOWN:
             case IconNodes.REQUIRED_ITEM:
             case IconNodes.PERMISSION_MESSAGE:
             case IconNodes.CLICK_REQUIREMENT_MESSAGE:
             case IconNodes.COOLDOWN_MESSAGE:
-              logger.log(Level.WARNING, "Ignored {0}.{1}",
-                  new Object[]{section.getPathPrefix(), subkey});
+              logger.warning(() -> "Ignored Section: " + section.getPathPrefix() + "." + subkey);
               break;
             default:
               to.set(subkey, section.get(subkey));
@@ -143,6 +152,66 @@ public class ChestCommands implements Converter {
         }
       }
     }
+  }
+
+  @SuppressWarnings("unchecked")
+  private Map<String, Object> convertRequirement(Logger logger, FlatFileSection section) {
+    Map<String, Object> map = new HashMap<>();
+    section.singleLayerKeySet().forEach(requirement -> {
+      Map<String, Object> options = new HashMap<>();
+      Object object = section.get(requirement);
+      if (object instanceof Map) {
+        Map<String, Object> fromOptions = (Map<String, Object>) object;
+        if (fromOptions.containsKey(RequirementSettings.VALUE)) {
+          setRequirementValue(logger, requirement, fromOptions.get(RequirementSettings.VALUE),
+              options);
+        }
+        if (fromOptions.containsKey(RequirementSettings.TAKE)) {
+          options.put(RequirementSettings.TAKE, fromOptions.get(RequirementSettings.TAKE));
+        }
+      } else {
+        setRequirementValue(logger, requirement, object, options);
+      }
+      if (options.containsKey(RequirementSettings.VALUE)) {
+        map.put(requirement, options);
+      }
+    });
+    return map;
+  }
+
+  private void setRequirementValue(Logger logger, String name, Object value,
+      Map<String, Object> map) {
+    try {
+      switch (Requirement.valueOf(name)) {
+        case ITEM:
+          logger.warning("Ignored Requirement: ITEM");
+          break;
+        case PERMISSION:
+          map.put(RequirementSettings.VALUE, Utils.createStringListFromObject(value, true, ";"));
+          break;
+        default:
+          map.put(RequirementSettings.VALUE, value);
+          break;
+      }
+    } catch (IllegalArgumentException e) {
+      logger.warning("Ignored Requirement: " + name);
+    }
+  }
+
+  private enum Requirement {
+    LEVEL,
+    MONEY,
+    PERMISSION,
+    POINT,
+    TOKEN,
+    CONDITION,
+    ITEM
+  }
+
+  private static class RequirementSettings {
+
+    static final String VALUE = "VALUE";
+    static final String TAKE = "TAKE";
   }
 
   private static class MenuSettings {
