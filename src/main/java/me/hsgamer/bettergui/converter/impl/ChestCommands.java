@@ -28,7 +28,8 @@ public class ChestCommands implements Converter {
       "SHIFT_RIGHT",
       "UNKNOWN",
       "WINDOW_BORDER_LEFT",
-      "WINDOW_BORDER_RIGHT"
+      "WINDOW_BORDER_RIGHT",
+      "DEFAULT"
   );
 
   private static List<Integer> toSlots(String input) {
