@@ -73,7 +73,7 @@ public class ChestCommands implements Converter {
               to.set(subkey, commands);
               break;
             case MenuSettings.OPEN_ITEM:
-              logger.warning("Ignored " + key + "." + subkey);
+              logger.warning(() -> "Ignored " + key + "." + subkey);
               break;
             case MenuSettings.AUTO_REFRESH:
             case MenuSettings.ROWS:
