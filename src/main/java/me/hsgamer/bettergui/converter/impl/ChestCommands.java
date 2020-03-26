@@ -36,13 +36,13 @@ public class ChestCommands implements Converter {
     List<Integer> slots = new ArrayList<>();
     for (String string : input.split(",")) {
       string = string.trim();
-      if (Utils.isValueNumber(string)) {
+      if (Utils.isValidNumber(string)) {
         slots.add(Integer.parseInt(string));
       } else {
         String[] split = string.split("-", 2);
         split[0] = split[0].trim();
         split[1] = split[1].trim();
-        if (Utils.isValueNumber(split[0]) && Utils.isValueNumber(split[1])) {
+        if (Utils.isValidNumber(split[0]) && Utils.isValidNumber(split[1])) {
           int s1 = Integer.parseInt(split[0]);
           int s2 = Integer.parseInt(split[1]);
           int start = Math.min(s1, s2);

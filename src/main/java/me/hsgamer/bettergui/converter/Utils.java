@@ -30,7 +30,7 @@ public class Utils {
     return list;
   }
 
-  public static boolean isValueNumber(String input) {
+  public static boolean isValidNumber(String input) {
     try {
       Double.parseDouble(input);
       return true;
