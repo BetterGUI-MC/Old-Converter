@@ -3,15 +3,33 @@ package me.hsgamer.bettergui.converter.impl;
 import de.leonhard.storage.internal.FlatFile;
 import de.leonhard.storage.sections.FlatFileSection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 import me.hsgamer.bettergui.converter.Converter;
 import me.hsgamer.bettergui.converter.Utils;
 
 public class ChestCommands implements Converter {
+
+  private static final List<String> CLICK_TYPE = Arrays.asList(
+      "CONTROL_DROP",
+      "CREATIVE",
+      "DOUBLE_CLICK",
+      "DROP",
+      "LEFT",
+      "MIDDLE",
+      "NUMBER_KEY",
+      "RIGHT",
+      "SHIFT_LEFT",
+      "SHIFT_RIGHT",
+      "UNKNOWN",
+      "WINDOW_BORDER_LEFT",
+      "WINDOW_BORDER_RIGHT"
+  );
 
   private static List<Integer> toSlots(String input) {
     List<Integer> slots = new ArrayList<>();
@@ -131,12 +149,19 @@ public class ChestCommands implements Converter {
                   Utils.createStringListFromObject(section.get(subkey), true, ";"));
               break;
             case IconNodes.CLICK_REQUIREMENT:
-              to.set(IconNodes.CLICK_REQUIREMENT + ".default.converted", convertRequirement(logger,
-                  from.getSection(section.getPathPrefix() + "." + subkey)));
+              Set<String> set = section.singleLayerKeySet();
+              if (Utils.isOneOf(set, CLICK_TYPE)) {
+                set.forEach(clicktype -> setRequirement(logger, to,
+                    IconNodes.CLICK_REQUIREMENT + "." + clicktype + ".converted",
+                    from.getSection(section.getPathPrefix() + "." + subkey + "." + clicktype)));
+              } else {
+                setRequirement(logger, to, IconNodes.CLICK_REQUIREMENT + ".default.converted",
+                    from.getSection(section.getPathPrefix() + "." + subkey));
+              }
               break;
             case IconNodes.VIEW_REQUIREMENT:
-              to.set(IconNodes.VIEW_REQUIREMENT + ".default.converted", convertRequirement(logger,
-                  from.getSection(section.getPathPrefix() + "." + subkey)));
+              setRequirement(logger, to, IconNodes.VIEW_REQUIREMENT + ".converted",
+                  from.getSection(section.getPathPrefix() + "." + subkey));
               break;
             case IconNodes.COOLDOWN:
             case IconNodes.REQUIRED_ITEM:
@@ -151,6 +176,13 @@ public class ChestCommands implements Converter {
           }
         }
       }
+    }
+  }
+
+  private void setRequirement(Logger logger, FlatFile to, String path, FlatFileSection section) {
+    Map<String, Object> requirement = convertRequirement(logger, section);
+    if (!requirement.isEmpty()) {
+      to.set(path, requirement);
     }
   }
 

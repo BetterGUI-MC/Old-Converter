@@ -2,6 +2,7 @@ package me.hsgamer.bettergui.converter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class Utils {
@@ -36,5 +37,9 @@ public class Utils {
     } catch (NumberFormatException e) {
       return false;
     }
+  }
+
+  public static <T> boolean isOneOf(Collection<T> input, Collection<T> compare) {
+    return input.stream().anyMatch(compare::contains);
   }
 }
