@@ -75,7 +75,7 @@
     <dependency>
       <groupId>com.github.JavaFactoryDev</groupId>
       <artifactId>LightningStorage</artifactId>
-      <version>3.0.8</version>
+      <version>3.0.9</version>
     </dependency>
   </dependencies>
 </project>
