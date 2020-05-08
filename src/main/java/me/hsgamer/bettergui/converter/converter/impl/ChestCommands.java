@@ -341,7 +341,6 @@ public class ChestCommands implements Converter {
 //    static final String BANNER_COLOR = "BANNER-COLOUR";
 //    static final String BANNER_PATTERNS = "BANNER-PATTERNS";
 //    static final String FIREWORK = "FIREWORK";
-//    static final String REQUIRED_ITEM = "REQUIRED-ITEM";
 
     static final String PRICE = "PRICE";
     static final String POINTS = "POINTS";
