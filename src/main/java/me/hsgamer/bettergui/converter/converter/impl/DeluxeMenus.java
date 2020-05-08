@@ -59,7 +59,7 @@ public class DeluxeMenus implements Converter {
           break;
         case IconSettings.SLOTS:
           List<String> strings = new ArrayList<>();
-          section.getIntegerList(s).forEach(slot -> strings.add(String.valueOf(slot)));
+          section.getList(s).forEach(slot -> strings.add(String.valueOf(slot)));
           icon.setSlot(String.join(", ", strings));
           break;
         case IconSettings.ENCHANTMENT:
