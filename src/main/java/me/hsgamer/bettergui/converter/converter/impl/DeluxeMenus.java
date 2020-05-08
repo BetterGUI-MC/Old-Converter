@@ -1,13 +1,14 @@
-package me.hsgamer.bettergui.converter.impl;
+package me.hsgamer.bettergui.converter.converter.impl;
 
 import de.leonhard.storage.internal.FlatFile;
 import de.leonhard.storage.sections.FlatFileSection;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
-import me.hsgamer.bettergui.converter.Converter;
+import me.hsgamer.bettergui.converter.Utils;
+import me.hsgamer.bettergui.converter.converter.Converter;
+import me.hsgamer.bettergui.converter.menupart.impl.Icon;
+import me.hsgamer.bettergui.converter.menupart.impl.Settings;
 
 public class DeluxeMenus implements Converter {
 
@@ -32,113 +33,109 @@ public class DeluxeMenus implements Converter {
         ;
   }
 
-  private static void setIcon(Logger logger, String name, FlatFileSection section, FlatFile to) {
-    to.setPathPrefix(name);
-    section.singleLayerKeySet().forEach(s -> {
-      List<String> flags = new ArrayList<>();
-      Map<String, List<String>> commands = new HashMap<>();
+  private static Icon getIcon(Logger logger, String name, FlatFileSection section) {
+    Icon icon = new Icon(name);
 
+    section.singleLayerKeySet().forEach(s -> {
       switch (s) {
         case IconSettings.MATERIAL:
-          to.set("id", section.get(s));
+          icon.setId(String.valueOf(section.get(s)));
           break;
         case IconSettings.DATA:
-          to.set("damage", section.get(s));
+          icon.setDamage(String.valueOf(section.get(s)));
           break;
         case IconSettings.AMOUNT:
         case IconSettings.AMOUNT_DYNAMIC:
-          to.set("amount", section.get(s));
+          icon.setAmount(String.valueOf(section.get(s)));
           break;
         case IconSettings.NAME:
-          to.set("name", section.get(s));
+          icon.setDisplayName(String.valueOf(section.get(s)));
           break;
         case IconSettings.LORE:
-          to.set("lore", section.get(s));
+          icon.setLore(section.getStringList(s));
           break;
         case IconSettings.SLOT:
-          to.set("slot", section.get(s));
+          icon.setSlot(String.valueOf(section.get(s)));
           break;
         case IconSettings.SLOTS:
           List<String> strings = new ArrayList<>();
           section.getIntegerList(s).forEach(slot -> strings.add(String.valueOf(slot)));
-          to.set("slot", String.join(", ", strings));
+          icon.setSlot(String.join(", ", strings));
           break;
         case IconSettings.ENCHANTMENT:
-          to.set("enchant", section.get(s));
+          icon.setEnchant(Utils.createStringListFromObject(section.get(s), true, ""));
           break;
         case IconSettings.HIDE_ENCHANTS:
-          flags.add("HIDE_ENCHANTS");
+          icon.addFlags("HIDE_ENCHANTS");
           break;
         case IconSettings.HIDE_EFFECTS:
-          flags.add("HIDE_POTION_EFFECTS");
+          icon.addFlags("HIDE_POTION_EFFECTS");
           break;
         case IconSettings.HIDE_ATTRIBUTES:
-          flags.add("HIDE_ATTRIBUTES");
+          icon.addFlags("HIDE_ATTRIBUTES");
           break;
         case IconSettings.LEFT_COMMANDS:
-          commands.put("left", convertActions(section.getStringList(s)));
+          icon.addProperty("command.left", convertActions(section.getStringList(s)));
           break;
         case IconSettings.SHIFT_LEFT_COMMANDS:
-          commands.put("shift_left", convertActions(section.getStringList(s)));
+          icon.addProperty("command.shift_left", convertActions(section.getStringList(s)));
           break;
         case IconSettings.RIGHT_COMMANDS:
-          commands.put("right", convertActions(section.getStringList(s)));
+          icon.addProperty("command.right", convertActions(section.getStringList(s)));
           break;
         case IconSettings.SHIFT_RIGHT_COMMANDS:
-          commands.put("shift_right", convertActions(section.getStringList(s)));
+          icon.addProperty("command.shift_right", convertActions(section.getStringList(s)));
           break;
         case IconSettings.MIDDLE_COMMANDS:
-          commands.put("middle", convertActions(section.getStringList(s)));
+          icon.addProperty("command.middle", convertActions(section.getStringList(s)));
           break;
         default:
           logger.info(() -> "Ignored icon setting " + name + "." + s);
           break;
       }
-
-      if (!flags.isEmpty()) {
-        to.set("flag", flags);
-      }
-      if (!commands.isEmpty()) {
-        to.set("command", commands);
-      }
     });
+
+    return icon;
   }
 
   @Override
   public void convert(Logger logger, FlatFile from, FlatFile to) {
+    Settings settings = new Settings();
+    List<Icon> icons = new ArrayList<>();
     for (String setting : from.singleLayerKeySet()) {
       switch (setting) {
         case MenuSettings.TITLE:
-          to.set("menu-settings.name", from.get(setting));
+          settings.setName(from.getString(setting));
           break;
         case MenuSettings.OPEN_COMMAND:
-          to.set("menu-settings.command", from.get(setting));
+          settings.setCommand(Utils.createStringListFromObject(from.get(setting), true, ""));
           break;
         case MenuSettings.OPEN_ACTION:
-          to.set("menu-settings.open-action", convertActions(from.getStringList(setting)));
+          settings.setOpenAction(convertActions(from.getStringList(setting)));
           break;
         case MenuSettings.CLOSE_ACTION:
-          to.set("menu-settings.close-action", convertActions(from.getStringList(setting)));
+          settings.setCloseAction(convertActions(from.getStringList(setting)));
           break;
         case MenuSettings.INVENTORY_TYPE:
-          to.set("menu-settings.inventory-type", from.getString(setting));
+          settings.setInventoryType(from.getString(setting));
           break;
         case MenuSettings.SIZE:
-          to.set("menu-settings.row", from.getInt(setting) / 9);
+          settings.setRows(from.getInt(setting) / 9);
           break;
         case MenuSettings.UPDATE:
-          to.set("menu-settings.auto-refresh", from.getInt(setting) * 20);
+          settings.setAutoRefresh(from.getInt(setting) * 20);
           break;
         case MenuSettings.ITEMS:
           from.singleLayerKeySet(setting)
-              .forEach(s -> setIcon(logger, s, from.getSection(setting + "." + s), to));
-          to.setPathPrefix(null);
+              .forEach(s -> icons.add(getIcon(logger, s, from.getSection(setting + "." + s))));
           break;
         default:
           logger.info(() -> "Ignored " + setting);
           break;
       }
     }
+    settings.getPaths().forEach(to::set);
+    icons.forEach(icon -> icon.getPaths().forEach(to::set));
   }
 
   private static final class MenuSettings {

@@ -1,4 +1,4 @@
-package me.hsgamer.bettergui.converter;
+package me.hsgamer.bettergui.converter.converter;
 
 import de.leonhard.storage.internal.FlatFile;
 import java.util.logging.Logger;

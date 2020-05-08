@@ -2,13 +2,14 @@ package me.hsgamer.bettergui.converter;
 
 import de.leonhard.storage.internal.FlatFile;
 import java.util.logging.Logger;
-import me.hsgamer.bettergui.converter.impl.ChestCommands;
-import me.hsgamer.bettergui.converter.impl.DeluxeMenus;
+import me.hsgamer.bettergui.converter.converter.Converter;
+import me.hsgamer.bettergui.converter.converter.impl.ChestCommands;
+import me.hsgamer.bettergui.converter.converter.impl.DeluxeMenus;
 
 public enum Type {
   CC(new ChestCommands()),
   DM(new DeluxeMenus());
-  private Converter converter;
+  private final Converter converter;
 
   Type(Converter converter) {
     this.converter = converter;

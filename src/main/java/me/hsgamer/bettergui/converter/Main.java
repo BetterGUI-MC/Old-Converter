@@ -4,6 +4,7 @@ import de.leonhard.storage.Config;
 import de.leonhard.storage.LightningBuilder;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.logging.Logger;
 
 public class Main {
 
-  private static Logger logger = Logger.getLogger(Main.class.getName());
+  private static final Logger logger = Logger.getLogger(Main.class.getName());
 
   static {
     ConsoleHandler handler = new ConsoleHandler();
@@ -44,6 +45,11 @@ public class Main {
         File outputDir = new File("output");
         if (outputDir.mkdirs()) {
           logger.info("Created output folder");
+        }
+
+        // Clear old output files
+        for (File old : outputDir.listFiles()) {
+          Files.delete(old.toPath());
         }
 
         for (File file : getFiles(logger, args)) {
