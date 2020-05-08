@@ -117,7 +117,7 @@ public class Icon implements MenuPart {
     return flags;
   }
 
-  public void addFlags(String flag) {
+  public void addFlag(String flag) {
     flags.add(flag);
   }
 

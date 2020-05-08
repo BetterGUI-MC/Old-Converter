@@ -142,7 +142,7 @@ public class ChestCommands implements Converter {
           List<String> enchants = Utils
               .createStringListFromObject(section.get(IconNodes.ENCHANT), true, ";");
           icon.setEnchant(enchants);
-          icon.addFlags("HIDE_ENCHANTS");
+          icon.addFlag("HIDE_ENCHANTS");
           break;
         case IconNodes.POSITION_X:
         case IconNodes.POSITION_Y:

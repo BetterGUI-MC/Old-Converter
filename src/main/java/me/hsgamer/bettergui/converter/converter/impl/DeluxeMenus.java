@@ -66,13 +66,13 @@ public class DeluxeMenus implements Converter {
           icon.setEnchant(Utils.createStringListFromObject(section.get(s), true, ""));
           break;
         case IconSettings.HIDE_ENCHANTS:
-          icon.addFlags("HIDE_ENCHANTS");
+          icon.addFlag("HIDE_ENCHANTS");
           break;
         case IconSettings.HIDE_EFFECTS:
-          icon.addFlags("HIDE_POTION_EFFECTS");
+          icon.addFlag("HIDE_POTION_EFFECTS");
           break;
         case IconSettings.HIDE_ATTRIBUTES:
-          icon.addFlags("HIDE_ATTRIBUTES");
+          icon.addFlag("HIDE_ATTRIBUTES");
           break;
         case IconSettings.LEFT_COMMANDS:
           icon.addProperty("command.left", convertActions(section.getStringList(s)));
