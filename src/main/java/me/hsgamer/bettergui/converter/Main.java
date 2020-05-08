@@ -35,6 +35,8 @@ public class Main {
   public static void main(String[] args) throws IOException {
     if (args.length > 0) {
       try {
+        long startTime = System.currentTimeMillis();
+
         Type type = Type.valueOf(System.getProperty("type", "CC"));
         logger.warning("");
         logger.warning("This is not a perfect converter");
@@ -71,6 +73,8 @@ public class Main {
           // Finish
           logger.info(() -> "CONVERTED \t--> " + outputDir.getName() + File.separator + filename);
         }
+
+        logger.info(() -> "FINISHED IN " + (System.currentTimeMillis() - startTime) + "ms");
       } catch (IllegalArgumentException e) {
         logger.warning("Cannot find the converter for " + args[0]);
         logger.warning("Available: " + Arrays.toString(Type.values()));
